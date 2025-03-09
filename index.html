@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生成AI初心者のための実践講座</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+
+    :root {
+      --fashion-1: #593C47;
+      --fashion-2: #F2E63D;
+      --fashion-3: #F2C53D;
+      --fashion-4: #F25C05;
+      --fashion-5: #F24405;
+      --text-body: #334155;
+      --text-subtitle: #475569;
+      --text-heading: #1e40af;
+    }
+
+    body {
+      font-family: 'Yomogi', cursive;
+      margin: 0;
+      padding: 20px;
+      background-color: #f8f9fa;
+      color: var(--text-body);
+      line-height: 1.4;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 2px dashed var(--fashion-1);
+      margin-bottom: 30px;
+    }
+
+    .title {
+      font-family: 'Kaisei Decol', serif;
+      font-size: 32px;
+      font-weight: bold;
+      background: linear-gradient(45deg, var(--fashion-1), var(--fashion-4));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin: 0;
+      position: relative;
+    }
+
+    .subtitle {
+      font-family: 'Zen Kurenaido', sans-serif;
+      font-size: 18px;
+      color: var(--fashion-4);
+      margin-top: 5px;
+      font-weight: bold;
+      position: relative;
+    }
+
+    .date {
+      font-family: 'Zen Kurenaido', sans-serif;
+      color: var(--text-subtitle);
+      font-size: 14px;
+    }
+
+    /* 統一用のカード（単一カラム）レイアウト */
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 15px;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border-color: var(--fashion-2);
+    }
+
+    /* 各部ごとのスタイル */
+    .card.intro {
+      background-color: rgba(242, 230, 61, 0.1);
+      border-left: 5px solid var(--fashion-2);
+    }
+    .card.part1 {
+      background-color: rgba(242,196,61,0.1);
+      border-left: 5px solid var(--fashion-3);
+    }
+    .card.part2 {
+      background-color: rgba(242, 91, 4, 0.1);
+      border-left: 5px solid var(--fashion-4);
+    }
+    .card.part3 {
+      background-color: rgba(242, 68, 4, 0.1);
+      border-left: 5px solid var(--fashion-5);
+    }
+    .card.part4 {
+      background-color: rgba(89, 59, 70, 0.1);
+      border-left: 5px solid var(--fashion-1);
+    }
+    .card.summary {
+      background: linear-gradient(135deg, rgba(242,230,61,0.1), rgba(242,68,4,0.1));
+      border: 2px dashed var(--fashion-3);
+    }
+
+    .section-title {
+      font-family: 'Kaisei Decol', serif;
+      font-size: 18px;
+      color: var(--text-heading);
+      font-weight: bold;
+      margin-top: 0;
+      margin-bottom: 15px;
+      padding-bottom: 5px;
+      border-bottom: 2px dashed var(--fashion-3);
+      display: flex;
+      align-items: center;
+    }
+
+    .section-icon {
+      margin-right: 10px;
+      font-size: 20px;
+    }
+
+    .highlight {
+      background: linear-gradient(transparent 60%, var(--fashion-2) 60%);
+      font-weight: bold;
+      padding: 0 2px;
+    }
+
+    .bullet-list {
+      padding-left: 10px;
+      list-style: none;
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 8px;
+    }
+
+    .bullet-list li:before {
+      content: "✦";
+      color: var(--fashion-4);
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+
+    .quote {
+      font-family: 'Zen Kurenaido', sans-serif;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-left: 3px solid var(--fashion-3);
+      padding: 10px;
+      margin: 10px 0;
+      font-style: italic;
+      position: relative;
+    }
+
+    .quote:before {
+      content: "“";
+      font-size: 30px;
+      color: var(--fashion-3);
+      position: absolute;
+      left: 5px;
+      top: -10px;
+    }
+
+    .step {
+      display: flex;
+      margin-bottom: 15px;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      background-color: var(--fashion-4);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .sticker {
+      position: absolute;
+      background-color: var(--fashion-4);
+      color: white;
+      transform: rotate(-15deg);
+      padding: 5px 10px;
+      border-radius: 5px;
+      top: -10px;
+      right: 20px;
+      font-weight: bold;
+      font-size: 14px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .note {
+      background-color: rgba(242, 230, 61, 0.2);
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      position: relative;
+    }
+
+    .note:before {
+      content: "📝";
+      position: absolute;
+      left: -5px;
+      top: -5px;
+    }
+
+    .banner {
+      background: linear-gradient(45deg, var(--fashion-1), var(--fashion-5));
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+      margin: 20px 0;
+      font-size: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .banner:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: shine 2s infinite;
+    }
+
+    @keyframes shine {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .connector {
+      position: relative;
+      display: block;
+      width: 3px;
+      height: 30px;
+      background-color: var(--fashion-3);
+      margin: 0 auto;
+    }
+
+    .connector:before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: -5px;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid var(--fashion-3);
+    }
+
+    .bubble {
+      position: relative;
+      background-color: white;
+      border-radius: 10px;
+      padding: 10px 15px;
+      margin: 15px 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border: 1px solid var(--fashion-3);
+    }
+
+    .bubble:after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 20px;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid white;
+    }
+
+    .bubble:before {
+      content: "";
+      position: absolute;
+      bottom: -11px;
+      left: 19px;
+      width: 0;
+      height: 0;
+      border-left: 11px solid transparent;
+      border-right: 11px solid transparent;
+      border-top: 11px solid var(--fashion-3);
+      z-index: -1;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    /* 追加（第2ファイル由来） */
+    .arrow {
+      text-align: center;
+      margin: 15px 0;
+      font-size: 20px;
+      color: var(--fashion-4);
+    }
+
+    .tag {
+      display: inline-block;
+      background-color: var(--fashion-2);
+      color: var(--fashion-1);
+      border-radius: 20px;
+      padding: 2px 10px;
+      margin: 2px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .checklist {
+      padding-left: 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      position: relative;
+      padding-left: 25px;
+      margin-bottom: 8px;
+    }
+
+    .checklist li:before {
+      content: "✓";
+      color: var(--fashion-5);
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 2px dashed var(--fashion-1);
+      color: var(--text-subtitle);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1 class="title">生成AI初心者のための実践講座</h1>
+        <p class="subtitle">「迷っている暇があったら使ってみよう！」</p>
+      </div>
+      <div class="date">2025年3月8日</div>
+    </div>
+    <div class="cards">
+      <!-- ファイル1の内容 -->
+      <!-- 導入 -->
+      <div class="card intro">
+        <h2 class="section-title"><span class="section-icon">🚀</span>導入 (5分)</h2>
+        <div class="sticker">スタート!</div>
+        <p><span class="highlight">自己紹介</span>：生成AIエバンジェリストとしての活動背景</p>
+        <div class="banner">今日のゴール提示：「今日の話を聞いたら、明日から実際に生成AIを使い始められるようになる」</div>
+        <p>共感ポイント:</p>
+        <div class="bubble">
+          「ChatGPTやPerplexityのアプリを入れてみたけど、うまく使えていない...」
+        </div>
+        <div class="bubble">
+          「触らなきゃと思ってるけど、結局触ったことがない」
+        </div>
+        <div class="bubble">
+          「一度使ってみたけど、回答がいまいちだった」
+        </div>
+        <div class="bubble">
+          「何となく使いこなせている感じがしない...」
+        </div>
+        <div class="note">
+          <strong>重要メッセージ</strong>：「今からでも遅くない！生成AIの最初の一歩を踏み出すお手伝いをします」
+        </div>
+        <p>講演の流れ：「よくいただく質問をもとに4つのテーマでお話します」</p>
+      </div>
+
+      <!-- 第1部 -->
+      <div class="card part1">
+        <h2 class="section-title"><span class="section-icon">🤔</span>第1部：「結局どの生成AIを使えばいいですか？」 (8分)</h2>
+        <p><span class="highlight">2種類の生成AIを紹介</span>：</p>
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <strong>検索系AI</strong>：「最新情報を調べてくれる新しいGoogle」
+            <ul class="bullet-list">
+              <li>Perplexity、Genspark、Felo</li>
+              <li>使用例：「2025年施行予定の○○法について教えて」</li>
+            </ul>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <strong>汎用系AI</strong>：「あなたの相談相手」
+            <ul class="bullet-list">
+              <li>ChatGPT、Claude、Gemini</li>
+              <li>使用例：「新商品のキャッチコピーを5つ考えて」</li>
+            </ul>
+          </div>
+        </div>
+        <div class="glass">
+          <p><span class="highlight">初心者向け推奨</span>：ChatGPT &amp; Perplexity の組み合わせ</p>
+          <ul class="bullet-list">
+            <li>なぜこの組み合わせ？：有名で情報が豊富、検索で解決策が見つけやすい</li>
+            <li>実体験ストーリー：「ChatGPTが最近のアップデート時に使えなくなって困った時、予備のClaudeがあって助かった」</li>
+          </ul>
+        </div>
+        <p>個人的な使い分け紹介：</p>
+        <div class="quote">
+          「私自身は最近ChatGPT &amp; Perplexityも使いますが、Claude &amp; Feloの組み合わせも多いです」
+        </div>
+        <div class="quote">
+          「各ツールの得意分野がわかってくると、目的に応じて使い分けられるようになります」
+        </div>
+        <p><span class="highlight">課金するべき？</span>：</p>
+        <ul class="bullet-list">
+          <li>「最初は無料版で十分スタートできます」</li>
+          <li>有料版（ChatGPT Plusなど）の特徴：
+            <ul class="bullet-list">
+              <li>回答が早い</li>
+              <li>より正確な回答が得られる</li>
+              <li>画像生成ができる</li>
+              <li>GPTs（カスタム機能）が使える</li>
+            </ul>
+          </li>
+          <li>課金を検討するタイミング：「自分の使い方が見えてきてから」</li>
+        </ul>
+      </div>
+
+      <!-- 第2部 -->
+      <div class="card part2">
+        <h2 class="section-title"><span class="section-icon">🔄</span>第2部：「生成AIを使う習慣が身につきません」 (7分)</h2>
+        <div class="quote">
+          「私も最初は『使わなきゃ』と思いつつ忘れてばかりでした」
+        </div>
+        <p><span class="highlight">習慣化の2ステップ</span>：</p>
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <strong>環境を作る</strong>：「使いたいと思ったらすぐ使える状態にする」
+            <ul class="bullet-list">
+              <li>PCでの環境設定：
+                <ul class="bullet-list">
+                  <li>お気に入りに入れておく</li>
+                  <li>デスクトップにショートカットを置く</li>
+                  <li>サイドバーにショートカットを固定する</li>
+                  <li>デスクトップアプリをインストールする</li>
+                </ul>
+              </li>
+              <li>スマホでの環境設定：
+                <ul class="bullet-list">
+                  <li>アプリをトップ画面のすぐ使える場所に置いておく</li>
+                </ul>
+              </li>
+            </ul>
+            <div class="note">
+              「生成AIを使うのに10秒以上かかるなら環境の見直しが必要です」
+            </div>
+          </div>
+        </div>
+        <div class="connector"></div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <strong>トリガー決め</strong>：「○○したら生成AIを使う」と決めておく
+            <ul class="bullet-list">
+              <li>時間・タイミングのトリガー：
+                <ul class="bullet-list">
+                  <li>朝起きたら...今の気分を入力して整理してもらう</li>
+                  <li>仕事の開始前に...今日の仕事の最優先事項の進め方を相談する</li>
+                  <li>夕食作りの前に...今日の夕飯のメニューを相談する</li>
+                </ul>
+              </li>
+              <li>状況のトリガー：
+                <ul class="bullet-list">
+                  <li>Google検索したくなったら...（生成AIで）調べる</li>
+                  <li>仕事で手が止まったら...タスクの全体像と進め方を相談する</li>
+                  <li>職場・家族のコミュニケーションに困ったら...とにかく話を聞いてもらう</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="quote">
+          「トリガーを『Google検索をする前にPerplexityで調べる』と決めただけで、1週間で使用頻度が5倍になりました」
+        </div>
+      </div>
+
+      <!-- 第3部（上部） -->
+      <div class="card part3">
+        <h2 class="section-title"><span class="section-icon">🎯</span>第3部：「生成AIって結局何に使ったらいいですか？」 (10分)</h2>
+        <div class="banner">
+          「迷うくらいならとにかく使ってみよう！プロンプトやツールの選択に迷う時間はもったいない」
+        </div>
+        <p><span class="highlight">「質問・相談相手」としての生成AI</span>：</p>
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <strong>日常生活での具体例</strong>：
+            <ul class="bullet-list">
+              <li>「なんで成人の日は1月なの？（子どもに聞かれた）」</li>
+              <li>「鼻の頭が赤くなってしまいました。どうやったら治りますか」</li>
+              <li>「この動画の概要を教えて（動画URLを渡す）」</li>
+            </ul>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <strong>仕事での相談例</strong>：
+            <ul class="bullet-list">
+              <li>「〇〇業界の2024年12月のトピックスをまとめてください」</li>
+              <li>「2025年に施行される労務関連の施策を収集して」</li>
+              <li>「この業務を自動化するとしたらどんなやり方があるか洗い出して」</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第3部（下部） -->
+      <div class="card part3">
+        <h2 class="section-title"><span class="section-icon">✨</span>第3部：続き</h2>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <strong>趣味・関心事での質問例</strong>：
+            <ul class="bullet-list">
+              <li>「このデータの表記揺れを直したいので、Pythonのコードを教えて」</li>
+              <li>「背景は白で、女の子のちびキャラとロボットAIが会話をたくさんしているイラストを描きたいのでプロンプトを考えて」</li>
+            </ul>
+          </div>
+        </div>
+        <div class="glass">
+          <p><span class="highlight">「あるある」体験の共有</span>：</p>
+          <div class="bubble">
+            「最初はこんな曖昧な質問をしていました...そしてこんな残念な回答が」
+          </div>
+          <div class="bubble">
+            「でも諦めずに質問を改善したら、こんなに素晴らしい回答が！」
+          </div>
+        </div>
+        <div class="note">
+          <strong>第4部につづく</strong>：「思った通りの回答が返ってこないのですが？」では、効果的なプロンプト設計の方法とテクニックについて詳しくお話しします。
+        </div>
+      </div>
+
+      <!-- ここまでのポイント -->
+      <div class="card glass">
+        <h2 class="section-title"><span class="section-icon">📚</span>ここまでのポイント</h2>
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <strong>使うAIの選択</strong>：
+            <ul class="bullet-list">
+              <li>検索系AI：最新情報を調べたいとき（Perplexity等）</li>
+              <li>汎用系AI：文章作成やアイデア出しに（ChatGPT、Claude等）</li>
+              <li>初心者は「ChatGPT + Perplexity」の組み合わせがおすすめ</li>
+            </ul>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <strong>習慣化の工夫</strong>：
+            <ul class="bullet-list">
+              <li>使いやすい環境作り（10秒以内にアクセスできる状態に）</li>
+              <li>トリガーを決める（〇〇したら生成AIを使う）</li>
+            </ul>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <strong>活用シーン</strong>：
+            <ul class="bullet-list">
+              <li>日常生活の疑問解決</li>
+              <li>仕事での情報収集・アイデア出し</li>
+              <li>趣味や関心事の相談・アドバイス</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ファイル2の内容 -->
+      <!-- 第4部（先頭） -->
+      <div class="card part4">
+        <h2 class="section-title"><span class="section-icon">🔍</span>第4部：「思った通りの回答が返ってこないのですが？」 (5分)</h2>
+        <div class="quote">
+          「私も最初は『こんなはずじゃなかった』と思う回答ばかりでした」
+        </div>
+        <p><span class="highlight">回答精度を上げる3ステップアプローチ</span>：</p>
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <strong>モデル選択</strong>：目的に合ったAIツールを選ぶ
+            <ul class="bullet-list">
+              <li>最新情報が必要なら検索系AI（Perplexity等）</li>
+              <li>文章作成やアイデア出しなら汎用系AI（ChatGPT、Claude等）</li>
+            </ul>
+            <div class="bubble">
+              「同じ質問をPerplexityとChatGPTで試してみたら全く違う回答が返ってきた時の驚き」
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <strong>インプット（プロンプト設計）</strong>：効果的な質問をする
+            <ul class="bullet-list">
+              <li>背景・文脈情報を追加：「私はマーケティング部門で働いています。経営層向けの提案資料を作成しています。」</li>
+              <li>前提条件の共有：「ExcelのVBAは初めてです」「すでに○○と△△は試しました」</li>
+            </ul>
+          </div>
+        </div>
+        <div class="glass">
+          <p><span class="highlight">WWWWHを意識したプロンプト設計</span>：</p>
+          <ul class="bullet-list">
+            <li><strong>Who</strong>（誰に向けた内容か）：「小学生向けに」「マーケティング初心者向けに」</li>
+            <li><strong>What</strong>（何について）：テーマを明確に</li>
+            <li><strong>Why</strong>（なぜ必要か）：「提案資料を作るために」など目的を伝える</li>
+            <li><strong>When</strong>（いつの情報か）：「最新の」「2024年の傾向を踏まえた」</li>
+            <li><strong>How</strong>（どのような形式で）：「箇条書きで」「500文字以内で」</li>
+          </ul>
+        </div>
+        <p><span class="highlight">プロンプト改善の具体例</span>：</p>
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <strong>ビフォー</strong>：「マーケティングについて教えて」
+          </div>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <strong>アフター</strong>：「20代向けInstagramの3ステップを300字で具体例を交えて教えてください。私はアパレルブランドのSNS担当で、フォロワーを増やしたいと思っています。」
+          </div>
+        </div>
+      </div>
+
+      <!-- 第4部（続き） -->
+      <div class="card part4">
+        <h2 class="section-title"><span class="section-icon">🧠</span>第4部：続き</h2>
+        <div class="glass">
+          <p><span class="highlight">使えるテンプレート紹介</span>：</p>
+          <div class="note">
+            「{ トピック } について { 対象者 } 向けに説明してください。特に { 重要なポイント} を中心に、{ 文字数 } 程度でまとめてください。具体例も入れてください。」
+          </div>
+          <div class="note">
+            「私は { あなたの立場 } で、{ 目的 } のために調べています。{ トピック } について知りたいのですが、特に{ 詳しく知りたい点 } を教えてください。私は { 前提知識レベル } です。」
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <strong>アウトプット（期待値調整）</strong>：対話で理想の回答に近づける
+            <ul class="bullet-list">
+              <li>「AIをパートナーとして捉え、一緒に考えを発展させる」アプローチ</li>
+              <li>段階的な質問例：
+                <ul class="bullet-list">
+                  <li>1回目：「ブログ記事の構成案を作って」</li>
+                  <li>2回目：「第2章をもう少し詳しく展開して」</li>
+                  <li>3回目：「ターゲット読者を30代主婦に変更して」</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="glass">
+          <p><span class="highlight">「ちょい足し」プロンプトテクニック</span>：</p>
+          <ul class="bullet-list">
+            <li>「小学生にもわかるように」：難しい説明をシンプルに</li>
+            <li>「ステップバイステップで考えて」：思考過程を見せてもらう</li>
+            <li>「具体例を3つ追加して」：抽象的な内容を具体化</li>
+            <li>「表形式にして」：情報を整理する</li>
+            <li>「今の回答を60点として、100点満点の回答をお願いします」：回答の質を上げる</li>
+          </ul>
+        </div>
+        <div class="quote">
+          「『小学生にもわかるように』というプロンプトを足しただけで、AIの回答が劇的に分かりやすくなりました」
+        </div>
+      </div>
+
+      <!-- まとめ -->
+      <div class="card summary">
+        <h2 class="section-title"><span class="section-icon">📌</span>まとめ (5分)</h2>
+        <div class="sticker">ゴール!</div>
+        <p><span class="highlight">今日のキーポイント</span>：</p>
+        <ul class="checklist">
+          <li><strong>「迷うくらいならさっさと使ってみよう！」</strong>：プロンプトやツール選びに迷う時間があったら、まず使ってみる</li>
+          <li><strong>「環境作りとトリガー決めが習慣化の鍵」</strong>：使いやすい環境と使うきっかけを明確にする</li>
+          <li><strong>「AIは完璧な回答マシンではなく相談パートナー」</strong>：一回の回答に満足せず対話を重ねる</li>
+          <li><strong>「WWWWHを意識したプロンプト」</strong>：具体的で明確な質問で精度を上げる</li>
+        </ul>
+        <div class="banner">すぐに実践できる3つのアクション</div>
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            「今日聞いた話の中で一番気になったことをAIに質問してみる」
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            「いつも検索している内容を一度AIに聞いてみる」
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            「『ちょい足しプロンプト』を1つ試してみる」
+          </div>
+        </div>
+        <p><span class="highlight">ビフォーアフターストーリー</span>：</p>
+        <div class="bubble">
+          「私は以前、資料作成に一日かかっていましたが、今では生成AIのおかげで半日で終わらせられるようになりました」
+        </div>
+        <div class="bubble">
+          「最初は思うような回答が得られず挫折しそうでしたが、今では質問の仕方が分かり、驚くほど役立つツールになっています」
+        </div>
+        <div class="note">
+          <strong>締めくくりの言葉</strong>：
+          <p>「生成AIは完璧ではありません。でも、気軽に質問できる相手として使ってみると、意外と役立つことが多いんです」</p>
+          <p>「『迷うくらいなら使う』という気持ちで、ぜひどんどん質問・相談してみてください」</p>
+          <p>「明日から、あなたも生成AIをあなたの相談相手にしてみませんか？」</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      © 2025 生成AIエバンジェリスト
+    </div>
+  </div>
+</body>
+</html>
